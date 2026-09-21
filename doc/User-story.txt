@@ -1,0 +1,28 @@
+1. Phân hệ Khách hàng (Client - Studio Game Indie)
+Tập trung vào việc tạo gig, khóa tiền (escrow) và nghiệm thu.
+Epic 1: Tạo và quản lý Gig
+Tạo Gig: Là một Client, tôi muốn tạo một gig công việc ngắn (ví dụ: viết 10 câu thoại NPC) bao gồm yêu cầu (brief), ngân sách, deadline và chọn khuôn mẫu bản quyền (license type) để bắt đầu thuê người làm.
+Ký quỹ (Fund Escrow): Là một Client, tôi muốn kết nối ví Phantom và nạp tiền ký quỹ (test USDC) vào Smart Contract trên Solana để hệ thống chuyển trạng thái gig thành "FUNDED", giúp tạo niềm tin cho freelancer.
+Giao việc: Là một Client, tôi muốn chỉ định công việc cho một Worker cụ thể (assign) sau khi đã khóa tiền ký quỹ để họ bắt đầu làm việc.
+Epic 2: Đánh giá và Nghiệm thu
+Xem AI Review: Là một Client, tôi muốn xem tóm tắt và đánh giá của AI (AI signals/coverage) đối với bài nộp của Worker để quyết định nghiệm thu nhanh hơn mà không cần đọc lại toàn bộ yêu cầu.
+Yêu cầu chỉnh sửa: Là một Client, tôi muốn yêu cầu Worker chỉnh sửa lại bài nộp (request revision) nếu file chưa đạt yêu cầu của brief.
+Nghiệm thu (Approve & Settle): Là một Client, tôi muốn ký giao dịch nghiệm thu bằng ví để Smart Contract tự động giải ngân (payout) cho Worker và hệ thống thu phí nền tảng.
+Hủy & Hoàn tiền (Cancel & Refund): Là một Client, tôi muốn có thể lấy lại tiền ký quỹ (refund) dựa trên các điều kiện hợp lệ (như quá hạn deadline mà Worker chưa nộp bài).
+2. Phân hệ Người làm việc (Worker - Freelancer / Sinh viên)
+Tập trung vào việc nộp sản phẩm, nhận tiền tức thì và lưu trữ bằng chứng.
+Epic 3: Làm việc và Nộp bài
+Nhận việc: Là một Worker, tôi muốn xem chi tiết brief và điều khoản bản quyền (terms hash) của gig đã được fund tiền để quyết định nhận việc.
+Upload File an toàn: Là một Worker, tôi muốn tải file kết quả (deliverable) lên kho lưu trữ riêng tư (private bucket) để khách hàng có thể kiểm tra mà file không bị lộ công khai ra bên ngoài.
+Lưu vết bài nộp: Là một Worker, tôi muốn hệ thống tự động băm file (content hash) và ghi nhận phiên bản nộp bài (submit_work_hash) để chứng minh tôi đã bàn giao đúng sản phẩm.
+Epic 4: Thanh toán và Quyền lợi
+Nhận tiền tức thì: Là một Worker, tôi muốn tiền USDC được tự động chuyển thẳng vào ví của tôi ngay giây phút Client bấm nghiệm thu mà không cần qua khâu đối soát của admin.
+Tranh chấp (Dispute): Là một Worker, tôi muốn mở tranh chấp (open dispute) đóng băng quy trình settlement nếu tôi đã nộp bài đúng hạn nhưng Client cố tình không duyệt.
+3. Phân hệ Hệ thống (Admin) & Người dùng Công khai (Public)
+Tập trung vào tính minh bạch, cấp phép IP (IP-License) và xử lý sự cố.
+Epic 5: Chứng nhận và Minh bạch
+Đúc biên lai (Mint Receipt): Là hệ thống, tôi muốn tự động đúc một Metaplex Core Asset (IP License Receipt) ngay sau khi giao dịch giải ngân thành công để cung cấp bằng chứng cấp phép IP cho các bên.
+Tra cứu công khai (Public Verify): Là một người dùng công khai, tôi muốn nhập Asset ID để xem trang xác minh biên lai (gồm content hash, terms hash, ví người tạo/khách hàng) mà không xem được file thực tế.
+Khắc phục lỗi Mint (Retry Queue): Là hệ thống, nếu quá trình đúc biên lai bị lỗi mạng, tôi muốn có cơ chế thử lại (retry receipt mint) mà không kích hoạt lại lệnh giải ngân lần hai (chống double payout).
+Epic 6: Quản trị (Dành cho Admin/Reviewer mock)
+Quản lý tranh chấp: Là một Admin, tôi muốn xem bằng chứng tranh chấp (dispute evidence), phiên bản file và log tin nhắn để đưa ra quyết định xử lý (resolution) hoàn tiền cho Client hay trả tiền cho Worker.
