@@ -1,0 +1,38 @@
+===== GIT STATUS =====
+ M docs/tasks.md
+ M package.json
+?? .env.example
+?? middleware.ts
+?? next-env.d.ts
+?? next.config.ts
+?? package-lock.json
+?? postcss.config.mjs
+?? scripts/
+?? src/
+?? tailwind.config.ts
+?? task-001-current-state.txt
+?? tests/
+?? tsconfig.tsbuildinfo
+?? vitest.config.ts
+
+===== DIFF STAT =====
+warning: in the working copy of 'docs/tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+ docs/tasks.md | 10 +++++++++-
+ package.json  | 41 ++++++++++++++++++-----------------------
+ 2 files changed, 27 insertions(+), 24 deletions(-)
+
+===== DIFF NAMES =====
+warning: in the working copy of 'docs/tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+docs/tasks.md
+package.json
+
+===== GIT LOG =====
+b500793 chore: add project documentation foundation
+
+===== PACKAGE LOCK =====
+package-lock.json EXISTS
+
+===== NODE MODULES =====
+node_modules EXISTS

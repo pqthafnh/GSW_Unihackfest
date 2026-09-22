@@ -1,10 +1,21 @@
 # Micro-Gig Network
 
-A hackathon MVP for creative micro-gigs. Indie game studios fund work through a Solana Devnet escrow, contributors submit deliverables privately, clients review the work, settlement pays the contributor, and a verifiable IP License Receipt is issued after settlement.
+A trust-first Product UI Foundation and Demo Shell for creative micro-gigs. The current UI demonstrates how indie game studios and contributors can align on briefs, terms and review context before backend, escrow, storage, AI and receipt integrations are connected.
+
+## Demo routes
+
+- `/`: product overview and planned architecture
+- `/demo`: choose a simulated client or contributor workspace
+- `/client`: client studio shell with static demo records
+- `/worker`: contributor workspace with static demo records
+
+The demo uses simulated data and test-asset labels only. No real funds move and no blockchain transaction is submitted. Solana Devnet is configured for the foundation; Anchor Escrow, Private Storage, Metaplex Core and AI Review remain **Not connected**.
 
 ## Product scope
 
-**In scope:** gig creation, license selection, test-token escrow, private submission upload, content hashing, AI-assisted review, human approval, settlement, receipt minting and public safe verification.
+**In scope for TASK-001A:** responsive marketing UI, demo selection, client/contributor dashboard shells, deterministic demo data, trust disclosures and planned technical stack transparency.
+
+**Planned product scope:** gig creation, license selection, test-token escrow, private submission upload, content hashing, AI-assisted review, human approval, settlement, receipt minting and public safe verification.
 
 **Out of scope:** mainnet funds, legal copyright adjudication, secondary marketplace, guaranteed off-platform royalties, DAO arbitration and multi-chain support.
 
@@ -28,4 +39,4 @@ npm run build
 ```
 
 ## Technical readiness
-Use `docs/deployment.md`, `docs/testing.md` and the technical connection checklist before declaring the demo ready. Never use mainnet or a real-value asset in the MVP.
+Use `docs/deployment.md`, `docs/testing.md` and the technical connection checklist before declaring the demo ready. Never use mainnet or a real-value asset in the MVP. TASK-001A is not a functional application or blockchain integration.
