@@ -30,6 +30,15 @@
 - Tests: `tests/unit/ui-foundation.test.ts` checks deterministic CTA, disclosure, atomic budget, valid status, planned stack and no-runtime-randomness contracts. Route compilation is verified by typecheck/build and runtime manually.
 - Docs/ADR impact: Updates README and this task record only. No migration or ADR required.
 
+### TASK-002A: Real Supabase Connection Foundation
+- Status: IN_PROGRESS
+- Goal: Establish server-safe Supabase clients, a minimal technical migration and a diagnostic database reachability endpoint.
+- Scope: Browser/server/admin client boundaries, strict configuration validation, `system_health_checks` migration, `/api/technical/supabase`, safe technical check and tests.
+- Exclusions: No product schema, authentication UI, profile flow, gigs API, storage upload, blockchain, wallet, Anchor, Metaplex or AI provider.
+- Acceptance criteria: Supabase status is reported only after a real query; missing/unapplied configuration is not reported as connected; secrets never appear in bundles, responses or logs; `/api/health` remains application-only; migration has RLS and no direct insert/select policies.
+- Tests: Supabase config/error/diagnostic unit tests; integration verification is pending migration application and is not faked.
+- Docs/ADR impact: Updates technical connection and setup documentation. Migration is forward-only and has not been pushed to a hosted project.
+
 - TASK-002 Supabase schema, Auth and RLS.
 - TASK-003 Client creates and locks a gig.
 - TASK-004 Anchor escrow initialize and fund.

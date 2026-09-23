@@ -15,3 +15,7 @@ Local, preview and demo. Solana cluster remains Devnet.
 
 ## Rollback
 Application rollback must not alter on-chain history. Use forward database migrations and disable affected UI actions if a provider is degraded.
+
+## TASK-002A Supabase foundation
+
+Keep `.env.local` uncommitted. The browser may receive only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; `SUPABASE_SECRET_KEY` is server-only. Run `npm run technical:check` after the `system_health_checks` migration has been applied to the intended Supabase project. Do not use `supabase login`, `supabase link`, or `supabase db push` as part of the foundation task without explicit approval.

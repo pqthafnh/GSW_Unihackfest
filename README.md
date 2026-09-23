@@ -40,3 +40,7 @@ npm run build
 
 ## Technical readiness
 Use `docs/deployment.md`, `docs/testing.md` and the technical connection checklist before declaring the demo ready. Never use mainnet or a real-value asset in the MVP. TASK-001A is not a functional application or blockchain integration.
+
+## Supabase foundation
+
+TASK-002A adds real Supabase client boundaries and `GET /api/technical/supabase`. Configure the public values and server-only `SUPABASE_SECRET_KEY` in an uncommitted `.env.local`. The diagnostic endpoint reports database reachability only after a real query; Auth and Storage remain not checked. The technical migration is forward-only and has not been pushed to a hosted project.

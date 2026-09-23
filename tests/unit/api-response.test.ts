@@ -57,7 +57,7 @@ describe("API Response Envelope Unit Tests", () => {
     expect(json.requestId.length).toBeGreaterThan(0);
 
     // Verify safe boundaries: no server secrets leaked
-    expect(json.data).not.toHaveProperty("SUPABASE_SERVICE_ROLE_KEY");
+    expect(json.data).not.toHaveProperty("SUPABASE_SECRET_KEY");
     expect(json.data).not.toHaveProperty("AI_API_KEY");
     expect(json.data).not.toHaveProperty("METAPLEX_MINT_AUTHORITY_SECRET");
     expect(json.data).not.toHaveProperty("CRON_SECRET");
