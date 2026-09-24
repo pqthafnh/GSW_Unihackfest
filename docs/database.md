@@ -16,3 +16,7 @@ Clients access their gigs; assigned workers access required job data; unrelated 
 
 ## Indexes
 Index ownership, assignment, status, created_at, gig foreign keys, pending transaction status and pending receipt status.
+
+## TASK-002C
+
+The Phase C migration adds `gigs` and `license_terms` with RLS, status constraints, locked-terms immutability and six security-definer RPCs. `budget_atomic` is PostgreSQL `bigint`; `token_mint` remains null until token configuration is verified. Terms are canonicalized and SHA-256 hashed inside the database at lock time. The migration is not applied to hosted Supabase yet.

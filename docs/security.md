@@ -11,3 +11,5 @@ Server-side authorization; RLS; private bucket; short-lived signed URLs; secret 
 
 ## Prohibited
 Mainnet, seed phrase collection, client-side service role, public deliverables, unverified settlement state and legal claims that exceed technical proof.
+
+Profile role is the authorization source of truth. Signup metadata is only trigger input and cannot create ADMIN. Protected pages verify the authenticated user server-side and then read the owner profile under RLS.

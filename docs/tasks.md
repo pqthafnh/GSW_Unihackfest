@@ -39,7 +39,17 @@
 - Tests: Supabase config/error/diagnostic unit tests; integration verification is pending migration application and is not faked.
 - Docs/ADR impact: Updates technical connection and setup documentation. Migration is forward-only and has not been pushed to a hosted project.
 
+### TASK-002B: Supabase Authentication, Profiles and Roles
+- Status: IN_PROGRESS
+- Goal: Add real email/password authentication, session refresh, profile creation and role-protected client/worker workspaces.
+- Scope: Auth UI/routes, server actions, middleware refresh, profiles migration with trigger/RLS/role protection, server-side authorization and unit tests.
+- Exclusions: OAuth, MFA, password reset, admin dashboard, gigs, Storage, blockchain, wallet, Anchor, Metaplex and AI.
+- Acceptance criteria: Only CLIENT/WORKER signup is accepted; profiles are created by the auth trigger; profile role is the authorization source; `/client` requires CLIENT and `/worker` requires WORKER; logout invalidates the session; secrets/tokens/passwords are not exposed.
+- Tests: Pure unit tests for validation, redirects and role authorization. Hosted RLS/runtime verification is deferred until the migration is applied and is not represented as a fake passing test.
+- Docs/ADR impact: Uses accepted ADR-002; adds the forward-only profiles migration and authentication setup notes.
+
 - TASK-002 Supabase schema, Auth and RLS.
+- TASK-002C: Gigs, license terms, RLS and atomic claim workflow implemented in the un-applied `_create_gigs_license_terms_and_rpc.sql` migration. Client and worker routes use authenticated Supabase reads and Server Actions; runtime RLS/concurrency verification remains pending migration application.
 - TASK-003 Client creates and locks a gig.
 - TASK-004 Anchor escrow initialize and fund.
 - TASK-005 Worker assignment and private submission.

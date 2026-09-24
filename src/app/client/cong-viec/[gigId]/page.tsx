@@ -1,0 +1,4 @@
+import Link from "next/link";
+import { readGig } from "@/lib/gigs/service";
+import { GigAction } from "@/components/gigs/gig-actions";
+export default async function GigDetail({ params }: { params: Promise<{ gigId: string }> }) { const { gigId } = await params; const { data: gig } = await readGig(gigId, "CLIENT"); if (!gig) return <main className="p-12">Không tìm thấy công việc.</main>; return <main className="mx-auto max-w-3xl space-y-5 px-6 py-12"><Link href="/client">← Danh sách</Link><h1 className="text-3xl font-semibold">{gig.title}</h1><p>{gig.description}</p><p>Trạng thái: <strong>{gig.status}</strong></p><p className="whitespace-pre-wrap rounded-xl bg-white p-5">{Array.isArray(gig.license_terms) ? gig.license_terms[0]?.terms_text : gig.license_terms?.terms_text}</p><div className="flex gap-2">{gig.status === "TERMS_LOCKED" && <GigAction gigId={gig.id} operation="open_gig" label="Mở nhận việc" />}</div></main>; }

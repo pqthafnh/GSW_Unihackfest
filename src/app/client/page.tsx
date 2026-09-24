@@ -1,27 +1,122 @@
-import { Activity, LockKeyhole } from "lucide-react";
-import { AppShell } from "@/components/common/app-shell";
-import { DEMO_CLIENT_METRICS, DEMO_GIGS, DEMO_PENDING_REVIEW } from "@/data/demo-data";
-import { MetricCard } from "@/components/ui/metric-card";
-import { GigPreviewCard } from "@/components/ui/gig-preview-card";
-import { SectionHeader } from "@/components/ui/section-header";
-import { SurfaceCard } from "@/components/ui/surface-card";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
-export default function ClientPage() {
+import { AppShell } from "@/components/common/app-shell";
+import { GigAction } from "@/components/gigs/gig-actions";
+import { Badge } from "@/components/ui/badge";
+import { readClientGigs } from "@/lib/gigs/service";
+import { requireProfileRole } from "@/lib/profile/server";
+
+function formatAtomicBudget(value: string): string {
+  try {
+    return BigInt(value).toLocaleString("vi-VN");
+  } catch {
+    return value;
+  }
+}
+
+export default async function ClientPage() {
+  const context = await requireProfileRole("CLIENT");
+  const { data: gigs, error } = await readClientGigs();
+
   return (
-    <AppShell role="Client Studio">
-      <div className="space-y-10">
-        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <div><Badge tone="neutral">Client view · simulated</Badge><h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-[#1d1d1f]">Client Studio</h1><p className="mt-3 max-w-2xl text-neutral-600">A read-only preview of how a studio can keep creative work, terms and review context together.</p></div>
-          <a href="#recent-gigs" className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[#0066cc] px-5 text-sm font-semibold text-[#0066cc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc]">View Demo Gigs</a>
+    <AppShell
+      role="Client Studio"
+      profile={context.profile}
+      email={context.user.email}
+    >
+      <div className="space-y-8">
+        <Badge tone="neutral">Môi trường thử nghiệm</Badge>
+
+        <div>
+          <h1 className="text-4xl font-semibold">Công việc của bạn</h1>
+          <p className="mt-3 text-neutral-600">
+            Dữ liệu được lưu thật trong Supabase. Không sử dụng tiền thật,
+            chưa có giao dịch blockchain hoặc ký quỹ on-chain.
+          </p>
         </div>
-        <section aria-label="Client summary metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{DEMO_CLIENT_METRICS.map((metric) => <MetricCard key={metric.id} {...metric} />)}</section>
-        <section id="recent-gigs" className="scroll-mt-6 space-y-5"><SectionHeader align="left" eyebrow="Portfolio view" title="Recent gigs" description="Static records only. Funding and settlement controls are intentionally not available in this shell." /><div className="grid gap-4 lg:grid-cols-2">{DEMO_GIGS.map((gig) => <GigPreviewCard key={gig.id} gig={gig} />)}</div></section>
-        <section className="grid gap-5 lg:grid-cols-[1.3fr_0.7fr]">
-          <SurfaceCard className="p-6 sm:p-7" elevation="raised-sm"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0066cc]">Submission requiring review</p><h2 className="mt-2 text-xl font-semibold">{DEMO_PENDING_REVIEW.gigTitle}</h2><p className="mt-2 text-sm text-neutral-600">Submitted by {DEMO_PENDING_REVIEW.contributorName} · {DEMO_PENDING_REVIEW.fileName}</p></div><Badge tone="warning">Human review required</Badge></div><div className="mt-6 grid gap-3 sm:grid-cols-2"><div className="rounded-xl bg-[#f5f5f7] p-4"><p className="text-xs text-neutral-500">Content hash</p><p className="mt-2 break-all font-mono text-xs text-neutral-700">{DEMO_PENDING_REVIEW.contentHashSha256}</p></div><div className="rounded-xl bg-[#f5f5f7] p-4"><p className="text-xs text-neutral-500">AI Review</p><p className="mt-2 font-semibold text-[#1d1d1f]">Not connected</p><p className="mt-1 text-xs leading-5 text-neutral-600">Advisory review signals will be available after integration. Human review remains required.</p></div></div></SurfaceCard>
-          <SurfaceCard variant="parchment" className="p-6 sm:p-7"><LockKeyhole className="h-6 w-6 text-[#0066cc]" /><h2 className="mt-5 text-xl font-semibold">Planned escrow status</h2><p className="mt-3 text-sm leading-6 text-neutral-600">Terms and escrow verification are planned. Anchor Escrow is not connected, so this view has no funding action.</p><Badge tone="neutral" className="mt-6">Not connected</Badge></SurfaceCard>
-        </section>
-        <section><SectionHeader align="left" eyebrow="Workspace pulse" title="Recent activity" description="There is no live activity feed in the demo shell." /><SurfaceCard className="p-8" elevation="flat"><div className="flex items-start gap-4"><Activity className="mt-1 h-5 w-5 text-neutral-400" /><div><h2 className="font-semibold">Simulated activity will appear here</h2><p className="mt-1 text-sm leading-6 text-neutral-600">This area is intentionally informational until authenticated activity and server-side events are connected.</p></div></div></SurfaceCard></section>
+
+        <Link
+          href="/client/cong-viec/tao-moi"
+          className="inline-flex rounded-full bg-[#0066cc] px-5 py-3 font-semibold text-white"
+        >
+          Tạo công việc
+        </Link>
+
+        {error ? (
+          <p className="text-red-600">
+            Không thể tải dữ liệu công việc. Vui lòng thử lại.
+          </p>
+        ) : gigs && gigs.length > 0 ? (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {gigs.map((gig) => (
+              <article
+                key={gig.id}
+                className="rounded-2xl bg-white p-6 shadow-sm"
+              >
+                <h2 className="text-xl font-semibold">{gig.title}</h2>
+
+                <p className="mt-2 text-sm text-neutral-600">
+                  {gig.description}
+                </p>
+
+                <p className="mt-3 text-sm">
+                  Trạng thái: <strong>{gig.status}</strong>
+                  {" · "}
+                  {formatAtomicBudget(gig.budget_atomic)} đơn vị thử nghiệm
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <Link
+                    className="rounded-full border px-4 py-2 text-sm"
+                    href={`/client/cong-viec/${gig.id}`}
+                  >
+                    Chi tiết
+                  </Link>
+
+                  {gig.status === "DRAFT" ? (
+                    <>
+                      <Link
+                        className="rounded-full border px-4 py-2 text-sm"
+                        href={`/client/cong-viec/${gig.id}/chinh-sua`}
+                      >
+                        Chỉnh sửa
+                      </Link>
+
+                      <GigAction
+                        gigId={gig.id}
+                        operation="lock_gig_terms"
+                        label="Khóa điều khoản"
+                      />
+                    </>
+                  ) : null}
+
+                  {["DRAFT", "TERMS_LOCKED", "OPEN"].includes(gig.status) ? (
+                    <GigAction
+                      gigId={gig.id}
+                      operation="cancel_gig"
+                      label="Hủy"
+                    />
+                  ) : null}
+
+                  {gig.status === "TERMS_LOCKED" ? (
+                    <GigAction
+                      gigId={gig.id}
+                      operation="open_gig"
+                      label="Mở nhận việc"
+                    />
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed bg-white p-8 text-center">
+            <h2 className="text-lg font-semibold">Chưa có công việc nào</h2>
+            <p className="mt-2 text-sm text-neutral-600">
+              Tạo công việc đầu tiên để bắt đầu quy trình cộng tác.
+            </p>
+          </div>
+        )}
       </div>
     </AppShell>
   );
