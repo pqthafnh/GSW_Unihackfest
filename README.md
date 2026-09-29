@@ -1,50 +1,91 @@
-# Micro-Gig Network
+# 🚀 Micro-Gig Network
 
-A trust-first Product UI Foundation and Demo Shell for creative micro-gigs. The current UI demonstrates how indie game studios and contributors can align on briefs, terms and review context before backend, escrow, storage, AI and receipt integrations are connected.
+Micro-Gig Network là một nền tảng phi tập trung (Decentralized Platform) kết nối các Indie Game Studio (Client) và các nhà sáng tạo nội dung, sinh viên, người làm việc tự do (Worker) thông qua mô hình tiểu công việc (Micro-gigs). 
 
-## Demo routes
+Dự án chú trọng tính minh bạch, uy tín và sự công bằng thông qua việc tích hợp Smart Contract trên hệ sinh thái **Solana**, bảo vệ quyền lợi của cả người thuê và người làm việc bằng cơ chế **Escrow (Ký quỹ)** và **Arbiter (Phân xử)** tự động.
 
-- `/`: product overview and planned architecture
-- `/demo`: choose a simulated client or contributor workspace
-- `/client`: client studio shell with static demo records
-- `/worker`: contributor workspace with static demo records
+---
 
-The demo uses simulated data and test-asset labels only. No real funds move and no blockchain transaction is submitted. Solana Devnet is configured for the foundation; Anchor Escrow, Private Storage, Metaplex Core and AI Review remain **Not connected**.
+## 🌟 Tính năng nổi bật (Features)
 
-## Product scope
+*   **🔒 Ký quỹ an toàn (Smart Contract Escrow):** Client sau khi thống nhất điều khoản sẽ nạp tiền (Token SOL - Devnet) vào két sắt trung gian (Vault PDA) được quản lý bởi Hợp đồng thông minh Anchor.
+*   **🤝 Giải ngân tự động:** Ngay khi Client bấm nghiệm thu (Approve), tiền từ két sắt sẽ tự động chuyển thẳng vào ví của Worker mà không qua sự can thiệp của bất kỳ ai.
+*   **⚖️ Hệ thống phân xử (Dispute Resolution):** Trong trường hợp xảy ra tranh chấp, Admin (Arbiter) có quyền phân định để bảo vệ lẽ phải, chia lại tỷ lệ tiền thưởng cho Client hoặc Worker hợp lý.
+*   **🔐 Quản lý danh tính & Vai trò (RBAC):** Tích hợp Supabase Auth với cơ chế phân quyền rõ ràng (Client / Worker).
+*   **🎨 Giao diện 3D mượt mà:** Trải nghiệm người dùng cao cấp với thư viện `framer-motion`, các hiệu ứng thẻ 3D nghiêng theo trỏ chuột, tạo cảm giác chuyên nghiệp và uy tín.
+*   **⏰ Cron Job tích hợp:** Luôn giữ hệ thống ở trạng thái hoạt động tốt nhất thông qua cơ chế Vercel Cron kiểm tra sức khoẻ tự động mỗi 5 phút.
 
-**In scope for TASK-001A:** responsive marketing UI, demo selection, client/contributor dashboard shells, deterministic demo data, trust disclosures and planned technical stack transparency.
+---
 
-**Planned product scope:** gig creation, license selection, test-token escrow, private submission upload, content hashing, AI-assisted review, human approval, settlement, receipt minting and public safe verification.
+## 🛠 Tech Stack (Công nghệ sử dụng)
 
-**Out of scope:** mainnet funds, legal copyright adjudication, secondary marketplace, guaranteed off-platform royalties, DAO arbitration and multi-chain support.
+*   **Frontend & Core API:** Next.js (App Router), TypeScript, Tailwind CSS, Framer Motion, Shadcn UI.
+*   **Database & Auth:** Supabase (PostgreSQL, Row Level Security - RLS).
+*   **Blockchain:** Solana Devnet.
+*   **Smart Contract:** Rust, Anchor Framework.
+*   **Web3 Client:** `@solana/web3.js`, `@solana/kit`, Wallet Adapter (Phantom, Solflare).
 
-## Documentation map
-- `AGENTS.md`: mandatory coding-agent instructions.
-- `.agents/rules/`: persistent engineering constraints.
-- `.agents/skills/`: task workflows.
-- `.agents/agents/`: specialist review personas.
-- `docs/`: product and engineering specifications.
-- `docs/decisions/`: architecture decision records.
+---
 
-## Intended commands
+## 🚀 Hướng dẫn cài đặt (Local Development)
 
+### 1. Yêu cầu hệ thống (Prerequisites)
+*   Node.js (>= 18.x)
+*   Rust & Cargo (để build Smart Contract)
+*   Solana CLI (dùng để test và deploy hợp đồng)
+*   Tài khoản Supabase (để tạo Database)
+
+### 2. Cài đặt các gói phụ thuộc
 ```bash
 npm install
-npm run dev
-npm run lint
-npm run typecheck
-npm run test
-npm run build
 ```
 
-## Technical readiness
-Use `docs/deployment.md`, `docs/testing.md` and the technical connection checklist before declaring the demo ready. Never use mainnet or a real-value asset in the MVP. TASK-001A is not a functional application or blockchain integration.
+### 3. Cấu hình biến môi trường
+Tạo file `.env.local` ở thư mục gốc và cung cấp các thông số sau (Lấy từ Supabase):
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
+NEXT_PUBLIC_SOLANA_DEVNET_RPC_URL=https://api.devnet.solana.com
+```
 
-## Supabase foundation
+### 4. Thiết lập Database (Supabase)
+Chạy các file script có trong thư mục `supabase/migrations` vào SQL Editor của Supabase để khởi tạo bảng `gigs`, `profiles`, và cấu hình RLS bảo mật.
 
-TASK-002A adds real Supabase client boundaries and `GET /api/technical/supabase`. Configure the public values and server-only `SUPABASE_SECRET_KEY` in an uncommitted `.env.local`. The diagnostic endpoint reports database reachability only after a real query; Auth and Storage remain not checked. The technical migration is forward-only and has not been pushed to a hosted project.
+### 5. Biên dịch Hợp đồng thông minh (Escrow Contract)
+```bash
+npm run escrow:build
+```
+*(Yêu cầu máy phải có môi trường Rust/Solana chuẩn hoặc dùng Docker)*
 
-## TASK-002C backend workflow
+### 6. Chạy dự án Frontend
+```bash
+npm run dev
+```
+Truy cập ứng dụng tại `http://localhost:3000`.
 
-TASK-002C adds a forward-only gigs and license-terms migration, server-side role authorization, atomic RPC state transitions and real Supabase-backed client/worker gig routes. Gig data is real backend data in the test environment, and budgets use atomic integer test units. Terms hashes are calculated in PostgreSQL and are not on-chain proofs. Storage, submissions, funding, blockchain transactions, settlement and receipt minting remain out of scope.
+---
+
+## 🚢 Hướng dẫn triển khai (Deploy)
+
+### Frontend & API (Vercel)
+Dự án được tối ưu 100% để chạy trên nền tảng **Vercel**:
+1. Đẩy code lên GitHub repository của bạn.
+2. Đăng nhập Vercel, chọn **Import Project**.
+3. Cấu hình các biến môi trường (`NEXT_PUBLIC_SUPABASE_URL`, v.v.) trong phần Environment Variables.
+4. Nhấn **Deploy**. Vercel sẽ tự động cấu hình Serverless Functions cho các API và nhận diện tệp `vercel.json` để chạy Cron Jobs.
+
+---
+
+## 📝 Quy trình một công việc (Gig Workflow)
+
+1. **Khởi tạo:** Client tạo công việc (DRAFT).
+2. **Khoá điều khoản:** Hai bên đồng ý điều khoản (TERMS_LOCKED).
+3. **Nạp tiền (Fund):** Client gọi lệnh nạp SOL vào két sắt Vault thông qua ví Phantom. Hệ thống ghi nhận trạng thái FUNDED.
+4. **Làm việc:** Worker bắt đầu làm và sau đó nộp sản phẩm (SUBMITTED).
+5. **Nghiệm thu (Approve):** Client kiểm tra và bấm "Nghiệm thu". Smart Contract giải ngân ngay lập tức cho Worker. Trạng thái chuyển thành SETTLED/RELEASED.
+6. **Tranh chấp (Tùy chọn):** Nếu có sự cố, trạng thái chuyển thành DISPUTED. Admin sẽ dùng quyền để đưa ra phán quyết cuối cùng (Resolve).
+
+---
+
+## 📜 Giấy phép (License)
+Dự án được phát triển trong khuôn khổ Unihackfest 2026. Mọi quyền liên quan thuộc về đội ngũ phát triển.
