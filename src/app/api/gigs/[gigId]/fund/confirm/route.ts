@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function POST(request: Request, { params }: { params: { gigId: string } }) {
-  const { gigId } = params;
+export async function POST(request: Request, { params }: { params: Promise<{ gigId: string }> }) {
+  const { gigId } = await params;
   const { signature } = await request.json();
 
   // In a real app, verify the transaction via RPC here.
