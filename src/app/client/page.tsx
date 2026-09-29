@@ -5,10 +5,11 @@ import { GigAction } from "@/components/gigs/gig-actions";
 import { Badge } from "@/components/ui/badge";
 import { readClientGigs } from "@/lib/gigs/service";
 import { requireProfileRole } from "@/lib/profile/server";
+import { DevnetWallet } from "@/components/solana/devnet-wallet";
 
 function formatAtomicBudget(value: string): string {
   try {
-    return BigInt(value).toLocaleString("vi-VN");
+    return new Intl.NumberFormat("vi-VN").format(BigInt(value || 0));
   } catch {
     return value;
   }
@@ -41,6 +42,8 @@ export default async function ClientPage() {
         >
           Tạo công việc
         </Link>
+
+        <DevnetWallet />
 
         {error ? (
           <p className="text-red-600">

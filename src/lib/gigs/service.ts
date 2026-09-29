@@ -11,17 +11,27 @@ import {
 } from "./repository";
 import type { GigInput } from "./validation";
 
+export class GigServiceError extends Error {
+  constructor(public code: "AUTH_REQUIRED" | "ROLE_FORBIDDEN" | "GIG_NOT_FOUND" | "GIG_ACCESS_DENIED" | "INTERNAL_ERROR") {
+    super(code);
+    this.name = "GigServiceError";
+  }
+}
+
 export async function gigContext(role: "CLIENT" | "WORKER") {
   const context = await getAuthenticatedProfile();
 
-  if (!context || context.profile.role !== role) {
-    throw new Error("UNAUTHORIZED");
+  if (!context) {
+    throw new GigServiceError("AUTH_REQUIRED");
+  }
+  if (context.profile.role !== role) {
+    throw new GigServiceError("ROLE_FORBIDDEN");
   }
 
   const client = await createSupabaseServerClient();
 
   if (!client) {
-    throw new Error("SUPABASE_UNAVAILABLE");
+    throw new GigServiceError("INTERNAL_ERROR");
   }
 
   return { context, client };

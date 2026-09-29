@@ -40,7 +40,7 @@
 - Docs/ADR impact: Updates technical connection and setup documentation. Migration is forward-only and has not been pushed to a hosted project.
 
 ### TASK-002B: Supabase Authentication, Profiles and Roles
-- Status: IN_PROGRESS
+- Status: DONE
 - Goal: Add real email/password authentication, session refresh, profile creation and role-protected client/worker workspaces.
 - Scope: Auth UI/routes, server actions, middleware refresh, profiles migration with trigger/RLS/role protection, server-side authorization and unit tests.
 - Exclusions: OAuth, MFA, password reset, admin dashboard, gigs, Storage, blockchain, wallet, Anchor, Metaplex and AI.
@@ -49,12 +49,34 @@
 - Docs/ADR impact: Uses accepted ADR-002; adds the forward-only profiles migration and authentication setup notes.
 
 - TASK-002 Supabase schema, Auth and RLS.
-- TASK-002C: Gigs, license terms, RLS and atomic claim workflow implemented in the un-applied `_create_gigs_license_terms_and_rpc.sql` migration. Client and worker routes use authenticated Supabase reads and Server Actions; runtime RLS/concurrency verification remains pending migration application.
+- TASK-002C: Gigs, license terms, RLS and atomic claim workflow implemented in `20260923190000_create_gigs_license_terms_and_rpc.sql` and applied to hosted Supabase. Client and worker routes use authenticated Supabase reads and Server Actions; concurrency, full RLS matrix and locked-terms runtime evidence remain incomplete.
 - TASK-003 Client creates and locks a gig.
 - TASK-004 Anchor escrow initialize and fund.
+- TASK-004C: Native SOL Anchor escrow local foundation
+  - Status: DONE (Deployed to Devnet: FgSE7P55TqSMW6RciDmzLuq3ti2YWrSc96p9WsEx7zr8)
+  - Uses native Devnet SOL, not the SPL test token proposed by TASK-004B for the MVP.
+  - Includes a placeholder-ID Anchor workspace, checked arithmetic, snapshot escrow
+    economics, state guards, local utilities/tests, Docker and CI skeletons.
+  - Excludes deployment, keypair generation, transaction execution, database push,
+    reconciliation and frontend funding/release UI.
+- TASK-004A: Real Wallet and Solana Devnet Transaction Proof
+  - Status: IMPLEMENTED; browser wallet runtime verification pending
+  - Goal: Connect a Wallet Standard-compatible browser wallet on Devnet and verify an explicit no-value memo proof.
+  - Scope: Client-only connect/disconnect, public key, live Devnet balance, refresh, memo proof lifecycle, Explorer link, and signature-only server verification.
+  - Exclusions: No escrow, funding, payment, transfer, airdrop, database state update, secret storage, or TASK-002D changes.
+  - Acceptance criteria: Wallet actions require an explicit click; only Devnet is accepted; confirmation is shown only after server-side finalized RPC verification; errors are safe and Vietnamese; proof verification checks a signer and the fixed memo instruction. Static verification passes; manual browser verification requires a real Wallet Standard extension and an explicit user-approved Devnet proof transaction.
+  - Tests: Pure Solana configuration/address/Explorer/lifecycle/error mapping tests.
+  - Docs/ADR impact: No migration or ADR required.
 - TASK-005 Worker assignment and private submission.
+- TASK-002D: Private Storage, submissions, revision requests and participant-signed downloads implemented locally; migration remains unapplied.
 - TASK-006 AI review adapter and UI panel.
 - TASK-007 Settlement and reconciliation.
 - TASK-008 Metaplex Core receipt and verify page.
 - TASK-009 Dispute/refund demo paths.
 - TASK-010 E2E, seed data, deployment and demo hardening.
+
+### TASK-004D: Frontend Escrow Integration
+- Status: TODO
+- Goal: Connect UI buttons to the Devnet Escrow Smart Contract.
+- Scope: Client funding transaction, Worker submission recording, Client approval release.
+- Exclusions: Mainnet.

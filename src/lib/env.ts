@@ -7,6 +7,7 @@ export const clientEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.preprocess(emptyStringToUndefined, z.string().url("Invalid Supabase URL").optional()),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
   NEXT_PUBLIC_SOLANA_CLUSTER: z.literal("devnet").default("devnet"),
+  NEXT_PUBLIC_SOLANA_DEVNET_RPC_URL: z.string().url().default("https://api.devnet.solana.com"),
   NEXT_PUBLIC_ESCROW_PROGRAM_ID: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
 });
 export const serverEnvSchema = z.object({

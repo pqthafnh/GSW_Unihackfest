@@ -1,15 +1,20 @@
+"use client";
+
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { motion, useMotionValue, useSpring, useTransform, HTMLMotionProps } from "framer-motion";
 
-export interface SurfaceCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SurfaceCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart"> {
   variant?: "ceramic" | "parchment" | "darkSatin" | "trustProof";
   elevation?: "flat" | "raised-xs" | "raised-sm" | "floating";
+  interactive?: boolean;
 }
 
 export function SurfaceCard({
   className,
   variant = "ceramic",
   elevation = "raised-xs",
+  interactive = false,
   children,
   ...props
 }: SurfaceCardProps) {
@@ -31,16 +36,64 @@ export function SurfaceCard({
     floating: "shadow-[0_4px_12px_rgba(0,0,0,0.08),0_24px_48px_rgba(0,0,0,0.08)]",
   };
 
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!interactive) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    if (!interactive) return;
+    x.set(0);
+    y.set(0);
+  };
+
+  const cardClasses = cn(
+    "rounded-2xl transition-all duration-200",
+    variantStyles[variant],
+    elevation !== "flat" && elevationStyles[elevation],
+    className
+  );
+
+  if (interactive) {
+    return (
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className={cn(cardClasses, "will-change-transform")}
+        {...props}
+      >
+        {/* Adds an inner element to push content forward for 3D effect */}
+        <div style={{ transform: "translateZ(40px)" }}>
+          {children}
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
-    <div
-      className={cn(
-        "rounded-2xl transition-all duration-200",
-        variantStyles[variant],
-        elevation !== "flat" && elevationStyles[elevation],
-        className
-      )}
-      {...props}
-    >
+    <div className={cardClasses} {...props}>
       {children}
     </div>
   );

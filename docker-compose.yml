@@ -1,0 +1,20 @@
+services:
+  escrow-check:
+    build:
+      context: .
+      args:
+        SOLANA_CLI_VERSION: "3.1.14"
+        ANCHOR_VERSION: "0.31.1"
+        NODE_VERSION: "22.14.0"
+    working_dir: /workspace
+    command: npm run escrow:check
+    volumes:
+      - .:/workspace
+      - escrow-target:/workspace/programs/escrow/target
+      - escrow-build-target:/workspace/target
+    environment:
+      # Deliberately no wallet, RPC secret, or keypair is mounted.
+      RUST_BACKTRACE: "1"
+volumes:
+  escrow-target:
+  escrow-build-target:

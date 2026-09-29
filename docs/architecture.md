@@ -6,7 +6,8 @@ The application uses a hybrid architecture. Private business data remains off-ch
 ## Components
 - Next.js experience and application server.
 - Supabase Auth, PostgreSQL with RLS and private Storage.
-- Anchor escrow program and test token accounts.
+- Anchor escrow program with a native SOL vault (Devnet only; program ID and
+  deployment remain gated placeholders).
 - AI review provider adapter.
 - Metaplex Core receipt adapter.
 - Reconciliation jobs for pending transactions and receipts.

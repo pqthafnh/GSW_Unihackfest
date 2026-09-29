@@ -8,7 +8,7 @@ import { requireProfileRole } from "@/lib/profile/server";
 
 function formatAtomicBudget(value: string): string {
   try {
-    return BigInt(value).toLocaleString("vi-VN");
+    return new Intl.NumberFormat("vi-VN").format(BigInt(value || 0));
   } catch {
     return value;
   }

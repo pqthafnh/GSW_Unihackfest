@@ -13,10 +13,13 @@ test-results/
 .DS_Store
 .vercel/
 target/
+!target/idl/
+!target/idl/*.json
 .anchor/
 programs/escrow/target/
 programs/escrow/.anchor/
-*.keypair.json
-id.json
+**/*keypair*.json
+**/id.json
+target/deploy/*.json
 supabase/.temp/
 .venv

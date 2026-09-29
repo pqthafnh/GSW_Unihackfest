@@ -1,0 +1,20 @@
+[features]
+seeds = true
+skip-lint = false
+
+[toolchain]
+anchor_version = "0.31.1"
+
+[programs.localnet]
+escrow = "FgSE7P55TqSMW6RciDmzLuq3ti2YWrSc96p9WsEx7zr8"
+
+[programs.devnet]
+# Placeholder only; replace with an approved generated program keypair before deployment.
+escrow = "FgSE7P55TqSMW6RciDmzLuq3ti2YWrSc96p9WsEx7zr8"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn mocha -t 1000000 tests/**/*.ts"

@@ -41,7 +41,7 @@ export function DemoModeBanner({ compact = false, className }: DemoModeBannerPro
             </span>
           </div>
           <p className="text-amber-800/90 leading-relaxed text-xs">
-            This workspace displays <strong>Simulated Data</strong>. <strong>No real funds</strong> are deposited, and <strong>no blockchain transaction is submitted</strong>. Unconnected integrations remain informational only.
+            Ví Solana Devnet có thể được kết nối để kiểm thử. <strong>Escrow on-chain chưa được triển khai; chưa có giao dịch ký quỹ.</strong> Memo proof có thể được ghi nhận trên mạng nhưng không chuyển giá trị. Không có giá trị tiền thật và không phải Mainnet.
           </p>
         </div>
       </div>

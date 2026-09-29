@@ -1,0 +1,19 @@
+name: Deploy escrow to Devnet (manual gate)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: Type DEPLOY_DEVNET to confirm an approved deployment
+        required: true
+        type: string
+jobs:
+  gated:
+    if: inputs.confirm == 'DEPLOY_DEVNET'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refuse until program ID and secrets are explicitly configured
+        run: |
+          echo "Deployment is intentionally gated. Generate an approved keypair and configure secrets in a separate reviewed change."
+          test -n "${{ secrets.SOLANA_RPC_URL }}" && test -n "${{ secrets.DEPLOYER_KEYPAIR }}" && exit 1 || true
+          exit 1

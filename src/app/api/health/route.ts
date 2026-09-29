@@ -1,15 +1,12 @@
-import { apiSuccess } from "@/lib/api/response";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const requestId = crypto.randomUUID();
-  
-  // Return safe fields only. Never expose secrets or internal connection strings.
-  return apiSuccess(
-    {
-      status: "healthy",
-      environment: process.env.NODE_ENV ?? "development",
-      configuredCluster: "devnet",
+  return NextResponse.json(
+    { 
+      status: "healthy", 
+      timestamp: new Date().toISOString(),
+      message: "Server is awake!"
     },
-    requestId
+    { status: 200 }
   );
 }

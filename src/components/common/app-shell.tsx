@@ -3,6 +3,7 @@ import { ArrowLeft, LayoutDashboard, Search } from "lucide-react";
 import { DemoModeBanner } from "@/components/common/demo-mode-banner";
 import { logoutAction } from "@/app/actions/auth";
 import type { Profile } from "@/lib/profile/types";
+import { WalletSummary } from "@/components/solana/wallet-summary";
 
 export interface AppShellProps {
   role: "Client Studio" | "Contributor Workspace";
@@ -25,7 +26,7 @@ export function AppShell({ role, profile, email, children }: AppShellProps) {
             <Link href={isClient ? "/client" : "/worker"} className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-[#0066cc]/10 px-4 text-sm font-semibold text-[#0066cc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc]"><LayoutDashboard className="h-4 w-4" />Overview</Link>
             <Link href="/demo" className="inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-medium text-neutral-600 hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc]"><Search className="h-4 w-4" />Switch demo</Link>
           </nav>
-          <div className="flex items-center gap-3"><div className="hidden text-right sm:block"><p className="text-sm font-semibold text-[#1d1d1f]">{profile.display_name}</p><p className="text-xs text-neutral-500">{profile.role === "CLIENT" ? "Nhà tuyển dụng" : "Cộng tác viên"}{email ? ` · ${email}` : ""}</p></div><form action={logoutAction}><button type="submit" className="min-h-[44px] rounded-full border border-black/10 px-3 text-xs font-semibold text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc]">Đăng xuất</button></form></div>
+          <div className="flex items-center gap-3"><div className="hidden text-right sm:block"><p className="text-sm font-semibold text-[#1d1d1f]">{profile.display_name}</p><p className="text-xs text-neutral-500">{profile.role === "CLIENT" ? "Nhà tuyển dụng" : "Cộng tác viên"}{email ? ` · ${email}` : ""}</p></div><WalletSummary /><form action={logoutAction}><button type="submit" className="min-h-[44px] rounded-full border border-black/10 px-3 text-xs font-semibold text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc]">Đăng xuất</button></form></div>
         </div>
       </header>
       <main className="flex-1"><div className="container mx-auto max-w-7xl px-6 py-8 lg:py-12"><div className="mb-8"><Link href="/demo" className="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066cc]"><ArrowLeft className="h-4 w-4" />Back to demo choices</Link></div><DemoModeBanner className="mb-8" />{children}</div></main>
