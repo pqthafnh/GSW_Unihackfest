@@ -25,7 +25,7 @@ export default async function WorkerPage() {
       email={context.user.email}
     >
       <div className="space-y-8">
-        <Badge tone="neutral">Môi trường thử nghiệm</Badge>
+        <Badge tone="neutral">Mạng Devnet</Badge>
 
         <div>
           <h1 className="text-4xl font-semibold">Tìm công việc</h1>
@@ -55,7 +55,7 @@ export default async function WorkerPage() {
                 <p className="mt-3 text-sm">
                   Trạng thái: <strong>{gig.status}</strong>
                   {" · "}
-                  {formatAtomicBudget(gig.budget_atomic)} đơn vị thử nghiệm
+                  {formatAtomicBudget(gig.budget_atomic)} SOL
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
