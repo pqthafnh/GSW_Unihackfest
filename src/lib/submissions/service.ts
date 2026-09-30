@@ -35,7 +35,7 @@ export async function uploadSubmission(formData: FormData) {
     p_sha256: hash,
     p_notes: metadata.data.notes ?? null,
   }).returns<Submission>();
-  if (error) { const cleanup = await client.storage.from(validateServerEnv().SUPABASE_PRIVATE_BUCKET).remove([path]); if (cleanup.error) console.error("submission compensation cleanup failed"); throw new Error("SUBMISSION_CREATE_FAILED"); }
+  if (error) { await client.storage.from(validateServerEnv().SUPABASE_PRIVATE_BUCKET).remove([path]); throw new Error("DB_ERROR: " + error.message); }
   return data;
 }
 export async function signedSubmissionUrl(submissionId: string) {

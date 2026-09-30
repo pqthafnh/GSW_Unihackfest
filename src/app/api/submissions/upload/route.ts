@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     else if (message === "FORBIDDEN") userMessage = "Bạn không có quyền nộp bài cho công việc này (trạng thái Gig không hợp lệ hoặc không phải là Worker được giao).";
     else if (message === "FILE_REQUIRED") userMessage = "Không tìm thấy tệp đính kèm.";
     else if (message === "INVALID_METADATA") userMessage = "Dữ liệu mô tả bài nộp không hợp lệ.";
-    else if (message === "SUBMISSION_CREATE_FAILED") userMessage = "Lỗi khi tạo bản ghi nộp bài trong Database.";
+    else if (message.startsWith("DB_ERROR: ")) userMessage = "Lỗi DB: " + message;
     
     // Fallback to exactly what the error is for debugging
     userMessage += ` (Debug code: ${message})`;
