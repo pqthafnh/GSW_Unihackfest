@@ -31,8 +31,7 @@ export default async function ClientPage() {
         <div>
           <h1 className="text-4xl font-semibold">Công việc của bạn</h1>
           <p className="mt-3 text-neutral-600">
-            Dữ liệu được lưu thật trong Supabase. Không sử dụng tiền thật,
-            chưa có giao dịch blockchain hoặc ký quỹ on-chain.
+            Hệ thống hợp đồng Hybrid: Nội dung & điều khoản lưu trữ an toàn trong Supabase, tích hợp giao dịch ký quỹ On-chain (Escrow) và trừ SOL thật trên mạng Solana Devnet.
           </p>
         </div>
 
