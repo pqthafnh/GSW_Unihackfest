@@ -13,9 +13,12 @@ export async function POST(
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
 
-  const supabase = createSupabaseAdminClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Server not configured" }, { status: 500 });
+  let supabase;
+  try {
+    supabase = createSupabaseAdminClient();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Admin client error";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 
   const { data: gig } = await supabase
@@ -33,7 +36,7 @@ export async function POST(
     .from("gigs")
     .update({ status: "OPEN" })
     .eq("id", gigId)
-    .in("status", ["TERMS_LOCKED", "DRAFT"]);
+    .in("status", ["TERMS_LOCKED", "DRAFT", "CLAIMED"]);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

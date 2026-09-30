@@ -14,9 +14,12 @@ export async function POST(
   }
 
   // Use admin client to bypass RLS for settlement
-  const supabase = createSupabaseAdminClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Server not configured" }, { status: 500 });
+  let supabase;
+  try {
+    supabase = createSupabaseAdminClient();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Admin client error";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 
   const { data: gig } = await supabase
