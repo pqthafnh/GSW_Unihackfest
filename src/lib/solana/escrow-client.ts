@@ -26,17 +26,13 @@ export async function getEscrowPda(gigDigest: Uint8Array): Promise<readonly [Add
 }
 
 export async function getVaultPda(escrowAddress: Address): Promise<readonly [Address, number]> {
-  // Wait, address bytes! In @solana/kit, address strings can be decoded.
-  // Actually, @solana/kit handles string addresses in seeds by converting them if specified,
-  // but to be safe, getProgramDerivedAddress expects Uint8Array for seeds.
-  // We can use getBase58Encoder().encode(escrowAddress) ? No, base58 decoded!
-  // It's better to import getBase58Encoder from @solana/kit, but wait, 
-  // address bytes are just the decoded base58.
+  // getAddressEncoder().encode() returns exactly 32 bytes (raw Ed25519 pubkey bytes from Base58)
+  // "vault" is 5 bytes - both are within Solana's 32-byte seed limit
   return await getProgramDerivedAddress({
     programAddress: ESCROW_PROGRAM_ID,
     seeds: [
-      "vault",
-      getAddressEncoder().encode(escrowAddress)
+      new TextEncoder().encode("vault"),
+      getAddressEncoder().encode(escrowAddress),
     ],
   });
 }

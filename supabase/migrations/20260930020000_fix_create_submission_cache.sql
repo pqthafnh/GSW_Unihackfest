@@ -1,4 +1,37 @@
--- Re-create create_submission function and reload PostgREST schema cache
+-- =============================================================
+-- Migration: Fix submissions table + add SETTLED gig status
+-- Run this in Supabase SQL Editor
+-- =============================================================
+
+-- 1. Add SETTLED to gig_status enum if not exists
+do $$
+begin
+  if not exists (
+    select 1 from pg_enum
+    where enumtypid = 'public.gig_status'::regtype
+      and enumlabel = 'SETTLED'
+  ) then
+    alter type public.gig_status add value 'SETTLED';
+  end if;
+end
+$$;
+
+-- 2. Add bucket_id column to submissions table if not exists
+do $$
+begin
+  if not exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'submissions'
+      and column_name = 'bucket_id'
+  ) then
+    alter table public.submissions
+      add column bucket_id text not null default 'deliverables';
+  end if;
+end
+$$;
+
+-- 3. Re-create create_submission function (ensures it matches current schema)
 create or replace function public.create_submission(
   p_gig_id uuid,
   p_submission_title text,
@@ -48,5 +81,5 @@ begin
 end
 $$;
 
--- Force PostgREST to reload schema cache immediately
+-- 4. Force PostgREST schema cache reload
 notify pgrst, 'reload schema';
