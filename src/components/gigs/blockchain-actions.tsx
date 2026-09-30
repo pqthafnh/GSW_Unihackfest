@@ -1,13 +1,28 @@
 "use client";
 import { useState, useContext, useSyncExternalStore } from "react";
 import { WalletClientContext } from "@/components/providers/app-providers";
-import { address, getBase58Encoder } from "@solana/kit";
+import { address } from "@solana/kit";
 import { getFundNativeSolInstruction, getPlatformConfigPda, getEscrowPda, getVaultPda, getResolveDisputeInstruction } from "@/lib/solana/escrow-client";
 
-// 1. Nút Fund (Nạp tiền vào quỹ)
+// Helper: tạo 32-byte digest từ gigId (mock: SHA-like hash bằng TextEncoder)
+// Trong MVP: hash gigId thành 32 bytes bằng cách đơn giản (không cần crypto thật)
+function mockDigest32(gigId: string): Uint8Array {
+  const bytes = new Uint8Array(32);
+  const encoded = new TextEncoder().encode(gigId);
+  for (let i = 0; i < encoded.length && i < 32; i++) {
+    bytes[i] = encoded[i];
+  }
+  return bytes;
+}
+
+// Mock Solana address (44-char Base58)
+const MOCK_ADDRESS = "11111111111111111111111111111111111111111111";
+
+// 1. Nut Fund (Nap tien vao quy)
 export function FundGigButton({ gigId, gigDigestHash, amount }: { gigId: string; gigDigestHash: string; amount: bigint }) {
   const client = useContext(WalletClientContext);
   const connected = useSyncExternalStore(
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (cb: any) => client?.wallet?.subscribe(cb) || (() => {}),
     () => client?.wallet?.getState?.()?.connected,
     () => null
@@ -18,36 +33,26 @@ export function FundGigButton({ gigId, gigDigestHash, amount }: { gigId: string;
     if (!client || !client.wallet) return;
     setLoading(true);
     try {
-      const gigDigestBytes = new Uint8Array(getBase58Encoder().encode(gigDigestHash));
-      if (gigDigestBytes.length !== 32) throw new Error("gigDigest format incorrect");
-      
+      // Mock: dung 32 zero-bytes hoac hash tu gigId thay vi decode Base58
+      const gigDigestBytes = mockDigest32(gigDigestHash || gigId);
+
       const [platformConfig] = await getPlatformConfigPda();
       const [escrowPda] = await getEscrowPda(gigDigestBytes);
       const [vaultPda] = await getVaultPda(escrowPda);
 
-      // (Trong thực tế, bạn sẽ lấy public key từ ví kết nối hiện tại)
-      const clientAddress = address("11111111111111111111111111111111111111111111"); // mock
-      
-      const ix = getFundNativeSolInstruction(escrowPda, platformConfig, clientAddress, vaultPda);
-      
-      // Ký và gửi transaction (sử dụng signAndSendTransaction)
-      // await client.wallet.signAndSendTransaction(tx);
+      const clientAddress = address(MOCK_ADDRESS);
+      getFundNativeSolInstruction(escrowPda, platformConfig, clientAddress, vaultPda);
 
-      // Gọi API cập nhật trạng thái
-      await fetch(`/api/gigs/${gigId}/settle`, {
-        method: "POST",
-      });
-      
-      // Gọi API cập nhật trạng thái
+      // Goi API cap nhat trang thai
       await fetch(`/api/gigs/${gigId}/fund/confirm`, {
         method: "POST",
         body: JSON.stringify({ signature: "mock_signature_for_now" }),
       });
-      
-      alert("Nạp quỹ thành công!");
+
+      alert("Nap quy thanh cong! (Devnet mock)");
     } catch (e) {
       console.error(e);
-      alert("Lỗi khi nạp quỹ.");
+      alert("Loi khi nap quy: " + (e instanceof Error ? e.message : String(e)));
     } finally {
       setLoading(false);
     }
@@ -55,15 +60,16 @@ export function FundGigButton({ gigId, gigDigestHash, amount }: { gigId: string;
 
   return (
     <button disabled={!connected || loading} onClick={handleFund} className="rounded-full bg-[#0066cc] text-white px-4 py-2 font-semibold hover:bg-[#0055aa]">
-      {loading ? "Đang xử lý..." : "Nạp tiền (Fund)"}
+      {loading ? "Dang xu ly..." : "Nap tien (Fund)"}
     </button>
   );
 }
 
-// 2. Nút Resolve Dispute (Giải quyết khiếu nại - Dành cho Admin/Arbiter)
+// 2. Nut Resolve Dispute (Giai quyet khieu nai)
 export function ResolveDisputeButton({ gigId, gigDigestHash, clientAddress, workerAddress }: { gigId: string; gigDigestHash: string; clientAddress: string; workerAddress: string }) {
   const client = useContext(WalletClientContext);
   const connected = useSyncExternalStore(
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (cb: any) => client?.wallet?.subscribe(cb) || (() => {}),
     () => client?.wallet?.getState?.()?.connected,
     () => null
@@ -74,32 +80,29 @@ export function ResolveDisputeButton({ gigId, gigDigestHash, clientAddress, work
     if (!client || !client.wallet) return;
     setLoading(true);
     try {
-      const gigDigestBytes = new Uint8Array(getBase58Encoder().encode(gigDigestHash));
-      
+      const gigDigestBytes = mockDigest32(gigDigestHash || gigId);
+
       const [escrowPda] = await getEscrowPda(gigDigestBytes);
       const [vaultPda] = await getVaultPda(escrowPda);
-      
-      // Lấy treasury từ config
-      const treasuryAddress = address("11111111111111111111111111111111111111111111"); // mock 
-      const arbiterAddress = address("11111111111111111111111111111111111111111111"); // mock Admin wallet address
 
-      const ix = getResolveDisputeInstruction(
+      const treasuryAddress = address(MOCK_ADDRESS);
+      const arbiterAddress = address(MOCK_ADDRESS);
+
+      getResolveDisputeInstruction(
         escrowPda,
         arbiterAddress,
-        address(clientAddress),
-        address(workerAddress),
+        address(clientAddress || MOCK_ADDRESS),
+        address(workerAddress || MOCK_ADDRESS),
         treasuryAddress,
         vaultPda,
         clientAward,
         workerAward
       );
-      
-      // Thực thi transaction...
-      
-      alert("Giải quyết khiếu nại thành công!");
+
+      alert("Giai quyet khieu nai thanh cong! (Devnet mock)");
     } catch (e) {
       console.error(e);
-      alert("Lỗi phân xử.");
+      alert("Loi phan xu: " + (e instanceof Error ? e.message : String(e)));
     } finally {
       setLoading(false);
     }
@@ -108,62 +111,70 @@ export function ResolveDisputeButton({ gigId, gigDigestHash, clientAddress, work
   return (
     <div className="flex gap-2">
       <button disabled={!connected || loading} onClick={() => handleResolve(500n, 0n)} className="rounded-full bg-red-600 text-white px-4 py-2 font-semibold">
-        Xử thắng cho Client
+        Xu thang cho Client
       </button>
       <button disabled={!connected || loading} onClick={() => handleResolve(0n, 500n)} className="rounded-full bg-green-600 text-white px-4 py-2 font-semibold">
-        Xử thắng cho Worker
+        Xu thang cho Worker
       </button>
     </div>
   );
 }
 
-// 3. Nút Approve Release (Phê duyệt và giải ngân cho Worker)
+// 3. Nut Approve Release (Phe duyet va giai ngan cho Worker)
 import { getApproveReleaseInstruction } from "@/lib/solana/escrow-client";
 export function ApproveReleaseButton({ gigId, gigDigestHash, workerAddress }: { gigId: string; gigDigestHash: string; workerAddress: string }) {
   const client = useContext(WalletClientContext);
   const connected = useSyncExternalStore(
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (cb: any) => client?.wallet?.subscribe(cb) || (() => {}),
     () => client?.wallet?.getState?.()?.connected,
     () => null
   );
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
 
   const handleApprove = async () => {
     if (!client || !client.wallet) return;
     setLoading(true);
+    setStatus("");
     try {
-      const gigDigestBytes = new Uint8Array(getBase58Encoder().encode(gigDigestHash));
+      const gigDigestBytes = mockDigest32(gigDigestHash || gigId);
       const [escrowPda] = await getEscrowPda(gigDigestBytes);
       const [vaultPda] = await getVaultPda(escrowPda);
 
-      // Treasury của nền tảng
-      const treasuryAddress = address("11111111111111111111111111111111111111111111"); 
-      // Lấy địa chỉ ví của Client hiện tại đang đăng nhập
-      const clientAddress = address("11111111111111111111111111111111111111111111"); // mock
+      const treasuryAddress = address(MOCK_ADDRESS);
+      const clientAddress = address(MOCK_ADDRESS);
 
-      const ix = getApproveReleaseInstruction(
+      getApproveReleaseInstruction(
         escrowPda,
         clientAddress,
-        address(workerAddress),
+        address(workerAddress || MOCK_ADDRESS),
         treasuryAddress,
         vaultPda
       );
 
-      // Ký và gửi transaction lên mạng
-      // await client.wallet.signAndSendTransaction(tx);
-
-      alert("Giải ngân cho Worker thành công!");
+      // Goi API settle (cap nhat DB)
+      const res = await fetch(`/api/gigs/${gigId}/settle`, { method: "POST" });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setStatus("Loi settle: " + (json?.error ?? res.status));
+      } else {
+        setStatus("Giai ngan thanh cong! (Devnet mock)");
+      }
     } catch (e) {
       console.error(e);
-      alert("Lỗi khi giải ngân.");
+      setStatus("Loi khi giai ngan: " + (e instanceof Error ? e.message : String(e)));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <button disabled={!connected || loading} onClick={handleApprove} className="rounded-full bg-green-500 text-white px-4 py-2 font-semibold hover:bg-green-600">
-      {loading ? "Đang xử lý..." : "Nghiệm thu & Giải ngân"}
-    </button>
+    <div>
+      <button disabled={!connected || loading} onClick={handleApprove} className="rounded-full bg-green-500 text-white px-4 py-2 font-semibold hover:bg-green-600">
+        {loading ? "Dang xu ly..." : "Nghiem thu & Giai ngan"}
+      </button>
+      {status && <p className="mt-2 text-sm font-medium">{status}</p>}
+    </div>
   );
 }
