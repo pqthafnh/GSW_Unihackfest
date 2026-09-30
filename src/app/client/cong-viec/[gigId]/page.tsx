@@ -10,7 +10,7 @@ export default async function GigDetail({ params }: { params: Promise<{ gigId: s
 
   // Giả lập hash và address cho UI test (do backend database chưa sync đủ schema)
   const fakeDigest = "11111111111111111111111111111111111111111111"; // 32 bytes hash base58 string mock
-  const fakeWorker = gig.assigned_worker_id || "11111111111111111111111111111111111111111111";
+  const fakeWorker = "11111111111111111111111111111111111111111111"; // Mock solana address, do NOT use UUID from DB as it crashes base58 parser
 
   return (
     <main className="mx-auto max-w-3xl space-y-5 px-6 py-12">

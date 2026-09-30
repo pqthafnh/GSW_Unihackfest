@@ -32,6 +32,11 @@ export function FundGigButton({ gigId, gigDigestHash, amount }: { gigId: string;
       
       // Ký và gửi transaction (sử dụng signAndSendTransaction)
       // await client.wallet.signAndSendTransaction(tx);
+
+      // Gọi API cập nhật trạng thái
+      await fetch(`/api/gigs/${gigId}/settle`, {
+        method: "POST",
+      });
       
       // Gọi API cập nhật trạng thái
       await fetch(`/api/gigs/${gigId}/fund/confirm`, {
