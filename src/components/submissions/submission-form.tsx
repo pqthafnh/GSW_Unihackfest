@@ -54,7 +54,7 @@ export function SubmissionForm({ gigId }: { gigId: string }) {
       <label className="block text-sm font-medium">TÃ³m táº¯t<input required name="summary" minLength={10} maxLength={5000} className="mt-2 min-h-11 w-full rounded-xl border p-3" /></label>
       <label className="block text-sm font-medium">Ghi chÃº (tuá»³ chá»n)<textarea name="notes" maxLength={5000} className="mt-2 min-h-24 w-full rounded-xl border p-3" /></label>
       <label className="block text-sm font-medium">Tá»‡p deliverable<input required name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.zip" className="mt-2 block min-h-11 w-full rounded-xl border p-3" /></label>
-      <p className="text-sm text-slate-600">Tá»‡p Ä‘Æ°á»£c lÆ°u trong private Storage. ÄÃ¢y lÃ  mÃ´i trÆ°á»ng thá»­ nghiá»‡m; khÃ´ng cÃ³ tiá»n tháº­t, giao dá»‹ch blockchain hoáº·c escrow on-chain.</p>
+      <p className="text-sm text-slate-600">Tá»‡p Ä‘Æ°á»£c lÆ°u trong private Storage. TÃ­ch há»£p báº±ng chá»©ng mÃ£ hÃ³a bÄƒm SHA-256 xÃ¡c thá»±c trÃªn máº¡ng lÆ°á»›i Solana Devnet.</p>
       {submissionState === "PENDING_WALLET" ? <p className="text-amber-600 font-semibold mt-4">Káº¿t ná»‘i vÃ­ Ä‘á»ƒ xÃ¡c nháº­n bÃ i ná»™p trÃªn Devnet.</p> : <button disabled={busy} className="min-h-11 rounded-full bg-[#0066cc] px-5 font-semibold text-white disabled:opacity-60">{busy ? "Äang táº£i lÃªn..." : "Ná»™p bÃ i"}</button>}
       {message && <p role="status" className="text-sm">{message}</p>}
     </form>

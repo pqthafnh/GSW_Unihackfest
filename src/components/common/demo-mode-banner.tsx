@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import { ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +17,7 @@ export function DemoModeBanner({ compact = false, className }: DemoModeBannerPro
         )}
       >
         <span className="h-2 w-2 rounded-full bg-amber-500" />
-        <span>Demo Mode • Simulated Data</span>
+        <span>Demo Mode â€¢ Simulated Data</span>
       </div>
     );
   }
@@ -35,13 +35,13 @@ export function DemoModeBanner({ compact = false, className }: DemoModeBannerPro
         <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
         <div className="space-y-1">
           <div className="font-semibold flex items-center gap-2">
-            <span>Demo Mode — Simulated Data Only</span>
+            <span>Demo Mode â€” Simulated Data Only</span>
             <span className="text-[10px] px-2 py-0.5 rounded bg-amber-200/80 text-amber-800 uppercase tracking-wider font-bold">
               Solana Devnet
             </span>
           </div>
           <p className="text-amber-800/90 leading-relaxed text-xs">
-            Ví Solana Devnet có thể được kết nối để kiểm thử. <strong>Escrow on-chain chưa được triển khai; chưa có giao dịch ký quỹ.</strong> Memo proof có thể được ghi nhận trên mạng nhưng không chuyển giá trị. Không có giá trị tiền thật và không phải Mainnet.
+            VÃ­ Solana Devnet cÃ³ thá»ƒ Ä‘Æ°á»£c káº¿t ná»‘i Ä‘á»ƒ kiá»ƒm thá»­. <strong>Escrow on-chain chÆ°a Ä‘Æ°á»£c triá»ƒn khai; chÆ°a cÃ³ giao dá»‹ch kÃ½ quá»¹.</strong> Memo proof cÃ³ thá»ƒ Ä‘Æ°á»£c ghi nháº­n trÃªn máº¡ng nhÆ°ng khÃ´ng chuyá»ƒn giÃ¡ trá»‹. KhÃ´ng cÃ³ giÃ¡ trá»‹ tiá»n tháº­t vÃ  khÃ´ng pháº£i Mainnet.
           </p>
         </div>
       </div>
